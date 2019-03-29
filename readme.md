@@ -1,6 +1,6 @@
 ## for execute :
 - mvn clean install
-- upload .jar file to Tomcat
+- upload .war file to Tomcat
 ## implemented:
 - index page with functionality
     - getUserByEmail(FreeMarker page), getUsersByName(PDF view)
