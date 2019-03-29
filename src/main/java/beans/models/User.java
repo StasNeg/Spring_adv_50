@@ -1,5 +1,8 @@
 package beans.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalDate;
 
 /**
@@ -9,10 +12,11 @@ import java.time.LocalDate;
  * Time: 7:35 PM
  */
 public class User {
-
+    @JsonIgnore
     private long      id;
     private String    email;
     private String    name;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
 
     public User() {

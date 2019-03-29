@@ -1,5 +1,6 @@
 package beans.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import util.CsvUtil;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  * Time: 7:55 PM
  */
 public class Auditorium {
-
+    @JsonIgnore
     private long   id;
     private String name;
     private int    seatsNumber;

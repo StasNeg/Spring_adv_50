@@ -1,11 +1,15 @@
+package beans.configuration;
+
 import beans.aspects.CounterAspect;
 import beans.aspects.DiscountAspect;
 import beans.aspects.LuckyWinnerAspect;
 import beans.models.*;
 import beans.services.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -19,11 +23,21 @@ import java.util.stream.IntStream;
  * Date: 2/4/2016
  * Time: 12:06 PM
  */
-public class Main {
+@Component
+public class Init {
 
-    public static void main(String[] args) {
+    ApplicationContext ctx;
 
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("spring.xml");
+    @Autowired
+    public Init(ApplicationContext ctx) {
+        this.ctx = ctx;
+    }
+
+    @PostConstruct
+    public void init() {
+//        ApplicationContext ctx = new ClassPathXmlApplicationContext("spring.xml");
+//        @Autowired
+//        ApplicationContext ctx;
 
         AuditoriumService auditoriumService = (AuditoriumService) ctx.getBean("auditoriumServiceImpl");
         BookingService bookingService = (BookingService) ctx.getBean("bookingServiceImpl");

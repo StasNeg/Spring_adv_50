@@ -1,5 +1,8 @@
 package beans.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalDateTime;
 
 /**
@@ -9,11 +12,12 @@ import java.time.LocalDateTime;
  * Time: 7:42 PM
  */
 public class Event {
-
+    @JsonIgnore
     private long          id;
     private String        name;
     private Rate          rate;
     private double        basePrice;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime dateTime;
     private Auditorium    auditorium;
 
