@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static beans.models.Roles.REGISTERED_USER;
 import static util.MapperUtil.MAPPER;
 
 public class ObjectMapperTest {
@@ -35,7 +36,7 @@ public class ObjectMapperTest {
         String auditoriumName = "Down hall";
         List<User> users = new ArrayList<>();
         for (String email : emails) {
-            users.add(new User(email, name, LocalDate.of(1985,04,21)));
+            users.add(new User(email, name, LocalDate.of(1985,04,21),REGISTERED_USER));
         }
         List<Event> events = new ArrayList<>();
 //        Auditorium myAuditorium = new Auditorium("Grand Plaza", 1000, Arrays.asList(27,28,29,30,31,32,33));

@@ -32,6 +32,9 @@
                         <input type="submit" value="Upload files">
                     </p>
                 </form>
+                <br/>
+                <br/>
+                <div><a href="logout">Logout</a></div>
                 <script>
                             function updateSize() {
                                 var nBytes = 0,

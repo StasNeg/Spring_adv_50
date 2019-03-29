@@ -15,4 +15,9 @@ public class RootContoller {
     public String handleRequest () {
         return "index";
     }
+
+    @RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
+    public String login () {
+        return "login";
+    }
 }

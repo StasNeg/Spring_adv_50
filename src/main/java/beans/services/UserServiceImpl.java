@@ -1,10 +1,14 @@
 package beans.services;
 
+import beans.AuthorizedUser;
 import beans.daos.UserDAO;
 import beans.models.Ticket;
 import beans.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +22,7 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserDAO userDAO;
 
@@ -45,6 +49,16 @@ public class UserServiceImpl implements UserService {
 
     public List<User> getUsersByName(String name) {
         return userDAO.getAllByName(name);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userDAO.getByEmail(email.toLowerCase());
+        if (user == null) {
+            throw new UsernameNotFoundException("User " + email + " is not found");
+        }
+        System.out.println("Authorization " + email);
+        return new AuthorizedUser(user);
     }
 
     public List<Ticket> getBookedTickets() {

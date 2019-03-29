@@ -17,6 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import static beans.models.Roles.REGISTERED_USER;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Dmytro_Babichev
@@ -54,8 +56,8 @@ public class Init {
         Auditorium redHall = auditoriumService.getByName("Red hall");
         LocalDateTime dateOfEvent = LocalDateTime.of(LocalDate.of(2016, 2, 5), LocalTime.of(15, 45, 0));
 
-        userService.register(new User(email, name, LocalDate.now()));
-        userService.register(new User("laory@yandex.ru", name, LocalDate.of(1992, 4, 29)));
+        userService.register(new User(email, name, LocalDate.now(),REGISTERED_USER));
+        userService.register(new User("laory@yandex.ru", name, LocalDate.of(1992, 4, 29),REGISTERED_USER));
 
         User userByEmail = userService.getUserByEmail(email);
         System.out.println("User with email: [" + email + "] is " + userByEmail);

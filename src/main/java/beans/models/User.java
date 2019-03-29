@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.LocalDate;
 
+import static beans.models.Roles.REGISTERED_USER;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Dmytro_Babichev
@@ -13,28 +15,39 @@ import java.time.LocalDate;
  */
 public class User {
     @JsonIgnore
-    private long      id;
-    private String    email;
-    private String    name;
+    private long id;
+    private String email;
+    private String name;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
+    private String roles;
+    private String password;
 
     public User() {
     }
 
-    public User(long id, String email, String name, LocalDate birthday) {
+    public User(long id, String email, String name, LocalDate birthday, String roles) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.birthday = birthday;
+        this.roles = roles;
+    }
+
+    public User(long id, String email, String name, LocalDate birthday) {
+        this(id, email, name, birthday, REGISTERED_USER);
     }
 
     public User(String email, String name, LocalDate birthday) {
-        this(-1, email, name, birthday);
+        this(-1, email, name, birthday, REGISTERED_USER);
+    }
+
+    public User(String email, String name, LocalDate birthday, String roles) {
+        this(-1, email, name, birthday, roles);
     }
 
     public User withId(long id) {
-        return new User(id, email, name, birthday);
+        return new User(id, email, name, birthday, roles);
     }
 
     public long getId() {
@@ -69,6 +82,22 @@ public class User {
         this.birthday = birthday;
     }
 
+    public String getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String roles) {
+        this.roles = roles;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -100,10 +129,10 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-               "id=" + id +
-               ", email='" + email + '\'' +
-               ", name='" + name + '\'' +
-               ", birthday=" + birthday +
-               '}';
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", birthday=" + birthday +
+                '}';
     }
 }
