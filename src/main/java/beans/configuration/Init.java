@@ -5,6 +5,7 @@ import beans.aspects.DiscountAspect;
 import beans.aspects.LuckyWinnerAspect;
 import beans.models.*;
 import beans.services.*;
+import org.hibernate.mapping.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -14,9 +15,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static beans.models.Roles.BOOKING_MANAGER;
 import static beans.models.Roles.REGISTERED_USER;
 
 /**
@@ -36,10 +40,7 @@ public class Init {
     }
 
     @PostConstruct
-    public void init() {
-//        ApplicationContext ctx = new ClassPathXmlApplicationContext("spring.xml");
-//        @Autowired
-//        ApplicationContext ctx;
+    public void init() {//
 
         AuditoriumService auditoriumService = (AuditoriumService) ctx.getBean("auditoriumServiceImpl");
         BookingService bookingService = (BookingService) ctx.getBean("bookingServiceImpl");
@@ -56,8 +57,17 @@ public class Init {
         Auditorium redHall = auditoriumService.getByName("Red hall");
         LocalDateTime dateOfEvent = LocalDateTime.of(LocalDate.of(2016, 2, 5), LocalTime.of(15, 45, 0));
 
-        userService.register(new User(email, name, LocalDate.now(),REGISTERED_USER));
-        userService.register(new User("laory@yandex.ru", name, LocalDate.of(1992, 4, 29),REGISTERED_USER));
+        User user1 = new User(email, name, LocalDate.now(),REGISTERED_USER);
+        User user2 = new User("laory@yandex.ru", name, LocalDate.of(1992, 4, 29),BOOKING_MANAGER);
+        User user3 = new User("stas@gmail.com", name, LocalDate.of(1975, 4, 21)
+                ,Arrays.asList(BOOKING_MANAGER, REGISTERED_USER).stream().collect(Collectors.joining(",")));
+//        password = "12345"
+        user2.setPassword("$2a$10$Gg.zB5Te86JueaLa3SlWoeKVXNon6PKtPeB14Cc1sDL86/Tdj7ssa");
+        user1.setPassword("$2a$10$Gg.zB5Te86JueaLa3SlWoeKVXNon6PKtPeB14Cc1sDL86/Tdj7ssa");
+        user3.setPassword("$2a$10$Gg.zB5Te86JueaLa3SlWoeKVXNon6PKtPeB14Cc1sDL86/Tdj7ssa");
+        userService.register(user1);
+        userService.register(user2);
+        userService.register(user3);
 
         User userByEmail = userService.getUserByEmail(email);
         System.out.println("User with email: [" + email + "] is " + userByEmail);

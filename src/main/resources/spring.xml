@@ -12,7 +12,6 @@
         http://www.springframework.org/schema/context/spring-context.xsd">
 
     <context:component-scan base-package="beans"/>
-    <bean id="userService" class="beans.services.UserServiceImpl"/>
     <aop:aspectj-autoproxy/>
 
 </beans>

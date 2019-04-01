@@ -7,53 +7,37 @@
         http://www.springframework.org/schema/security/spring-security.xsd
         http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd">
-    <!-- Это сокращенный синтаксис, отвечает за установку логина на основе веб-формы, базовый логин и выход из приложения -->
 
     <http pattern="/resources/**" security="none"/>
     <http pattern="/webjars/**" security="none"/>
 
-
-    <http pattern="/rest/**" use-expressions="true" name="restSecurityFilterChain" create-session="stateless">
-        <http-basic/>
-        <intercept-url pattern="/rest/admin/**" access="hasRole('ROLE_ADMIN')"/>
-        <intercept-url pattern="/**" access="isAuthenticated()"/>
-        <csrf disabled="true"/>
-    </http>
+    <b:bean class="util.PasswordUtil" id="passwordEncoder" factory-method="getPasswordEncoder"/>
+    <b:bean id="userService" class="beans.services.UserServiceImpl"/>
 
     <http use-expressions="true">
         <intercept-url pattern="/login" access="isAnonymous()"/>
-        <intercept-url pattern="/register" access="isAnonymous()"/>
-
-        <intercept-url pattern="/**/booking/**" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/**/booking/**" access="hasRole('ROLE_BOOKING_MANAGER')"/>
         <intercept-url pattern="/**" access="isAuthenticated()"/>
 
         <form-login login-page="/login" default-target-url="/"
                     authentication-failure-url="/login?error=true"
                     login-processing-url="/spring_security_check"/>
-        <logout logout-success-url="/register"/>
+        <logout logout-success-url="/login"/>
+        <logout delete-cookies="JSESSIONID" />
+        <!--14 days * 24 hours * 60 minutes *  60 seconds = 1209600-->
+        <remember-me
+
+                token-validity-seconds="1209600"
+                remember-me-parameter="remember-me"
+                user-service-ref="userService"
+                data-source-ref="dataSource" />
         <csrf disabled="true"/>
     </http>
 
-    <b:bean class="util.PasswordUtil" id="passwordEncoder" factory-method="getPasswordEncoder"/>
-
     <authentication-manager>
         <authentication-provider user-service-ref="userService">
-            <!--<password-encoder ref="passwordEncoder"/>-->
+            <password-encoder ref="passwordEncoder"/>
         </authentication-provider>
     </authentication-manager>
 
-
-
-
-
-    <!--<http auto-config="true">-->
-        <!--<intercept-url pattern="/" access="hasRole('ROLE_ADMIN')"/> &lt;!&ndash; Задает шаблон, с которым сравниваются URL-адреа входящих запросов, тоесть что бы попасть в любой файл(так как у нас в pattern="/") нам нужно иметь доступ админа &ndash;&gt;-->
-    <!--</http>-->
-    <!--<authentication-manager>-->
-        <!--<authentication-provider>-->
-            <!--<user-service>-->
-                <!--<user name="admin" password="admin" authorities="ROLE_ADMIN"/> &lt;!&ndash; Добавляем пользователя который будет иметь права админа &ndash;&gt;-->
-            <!--</user-service>-->
-        <!--</authentication-provider>-->
-    <!--</authentication-manager>-->
 </b:beans>
