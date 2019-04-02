@@ -6,16 +6,20 @@ import beans.models.Ticket;
 import beans.models.User;
 import beans.services.BookingService;
 import beans.services.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import util.CsvUtil;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import static util.MapperUtil.MAPPER;
 
 @Controller
 @RequestMapping(value = "/booking")
@@ -56,5 +60,14 @@ public class BookingController {
         return new ResponseEntity<>(bookingService.getTicketsForEvent(event, auditorium,LocalDateTime.parse(date, FORMATTER)), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    String getUserByEmail(Model model) throws JsonProcessingException {
+        String date = "2016-02-05T21:18";
+        String auditorium = "Yellow hall";
+        String event = "The revenant";
+        List<Ticket> current = bookingService.getTicketsForEvent(event, auditorium,LocalDateTime.parse(date, FORMATTER));
+        model.addAttribute("request", MAPPER.writeValueAsString(current));
+        return "booking";
+    }
 
 }
