@@ -41,8 +41,8 @@ public class ObjectMapperTest {
         List<Event> events = new ArrayList<>();
 //        Auditorium myAuditorium = new Auditorium("Grand Plaza", 1000, Arrays.asList(27,28,29,30,31,32,33));
 //        String name, Rate rate, double basePrice, LocalDateTime dateTime, Auditorium auditorium
-        Event event1 = new Event(eventName, Rate.HIGH, 200,LocalDateTime.of(2019,11,05,19,45),null);
-        Event event2 = new Event(eventName, Rate.LOW, 300,LocalDateTime.of(2019,12,05,20,00),null);
+        Event event1 = new Event(eventName, Rate.HIGH, 200,100,LocalDateTime.of(2019,11,05,19,45),null);
+        Event event2 = new Event(eventName, Rate.LOW, 300,200,LocalDateTime.of(2019,12,05,20,00),null);
         JsonModel model = new JsonModel(users,Arrays.asList(event1,event2));
         jsonTest = MAPPER.writeValueAsString(model);
         System.out.println(jsonTest);

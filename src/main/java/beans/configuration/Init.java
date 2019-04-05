@@ -14,6 +14,7 @@ import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -47,7 +48,7 @@ public class Init {
         EventService eventService = (EventService) ctx.getBean("eventServiceImpl");
         UserService userService = (UserService) ctx.getBean("userServiceImpl");
         DiscountService discountService = (DiscountService) ctx.getBean("discountServiceImpl");
-
+        UserAccountService userAccountService = (UserAccountService) ctx.getBean("userAccountServiceImpl");
         String email = "dmitriy.vbabichev@gmail.com";
         String name = "Dmytro Babichev";
         String eventName = "The revenant";
@@ -68,6 +69,10 @@ public class Init {
         userService.register(user1);
         userService.register(user2);
         userService.register(user3);
+        Arrays.asList(new UserAccount(user1, 380),
+        new UserAccount(user2, 450),
+        new UserAccount(user3, 20)).forEach(userAccount->userAccountService.createOrUpdate(userAccount.getUser(),userAccount));
+
 
         User userByEmail = userService.getUserByEmail(email);
         System.out.println("User with email: [" + email + "] is " + userByEmail);
@@ -75,22 +80,22 @@ public class Init {
 
         System.out.println("All users with name: [" + name + "] are: ");
         userService.getUsersByName(name).forEach(System.out:: println);
-        System.out.println();
+
 
         Event event1 = eventService.create(
-                new Event(eventName, Rate.HIGH, 60, LocalDateTime.of(LocalDate.of(2016, 2, 5), LocalTime.of(9, 0, 0)),
+                new Event(eventName, Rate.HIGH, 60,60, LocalDateTime.of(LocalDate.of(2016, 2, 5), LocalTime.of(9, 0, 0)),
                           blueHall));
         System.out.println();
         System.out.println("Event by name: " + eventService.getByName(event1.getName()));
         System.out.println();
-        eventService.create(new Event(eventName, Rate.HIGH, 60, dateOfEvent, blueHall));
+        eventService.create(new Event(eventName, Rate.HIGH, 60,60, dateOfEvent, blueHall));
         Event event2 = eventService.create(
-                new Event(eventName, Rate.HIGH, 60, LocalDateTime.of(LocalDate.of(2016, 2, 5), LocalTime.of(21, 18, 0)),
+                new Event(eventName, Rate.HIGH, 60,60, LocalDateTime.of(LocalDate.of(2016, 2, 5), LocalTime.of(21, 18, 0)),
                           blueHall));
         eventService.create(
-                new Event(eventName, Rate.HIGH, 90, LocalDateTime.of(LocalDate.of(2016, 2, 5), LocalTime.of(21, 18, 0)),
+                new Event(eventName, Rate.HIGH, 90,90, LocalDateTime.of(LocalDate.of(2016, 2, 5), LocalTime.of(21, 18, 0)),
                           redHall));
-        Event event = new Event(eventName, Rate.HIGH, 150,
+        Event event = new Event(eventName, Rate.HIGH, 150,150,
                                 LocalDateTime.of(LocalDate.of(2016, 2, 5), LocalTime.of(21, 18, 0)), yellowHall);
         event = eventService.create(event);
 

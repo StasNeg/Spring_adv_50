@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -57,7 +58,7 @@ public class EventServiceImplTest {
     @Qualifier("testHall2")
     Auditorium auditorium2;
 
-    private final Event testEvent = new Event(UUID.randomUUID().toString(), Rate.HIGH, 1321, LocalDateTime.now(),
+    private final Event testEvent = new Event(UUID.randomUUID().toString(), Rate.HIGH, 1321,200, LocalDateTime.now(),
                                                      null);
 
     @Autowired
@@ -172,7 +173,7 @@ public class EventServiceImplTest {
         eventService.assignAuditorium(event, testEvent.getAuditorium(), testEvent.getDateTime());
         List<Event> after = eventService.getAll();
         before.remove(event);
-        before.add(new Event(event.getId(), event.getName(), event.getRate(), event.getBasePrice(),
+        before.add(new Event(event.getId(), event.getName(), event.getRate(), event.getBasePrice(),event.getTicketPrice(),
                              testEvent.getDateTime(), testEvent.getAuditorium()));
         System.out.println("before = " + before);
         System.out.println("after = " + after);

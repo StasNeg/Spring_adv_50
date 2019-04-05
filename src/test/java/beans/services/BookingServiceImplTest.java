@@ -11,6 +11,7 @@ import beans.daos.mocks.UserDAOMock;
 import beans.models.Event;
 import beans.models.Ticket;
 import beans.models.User;
+import beans.models.UserAccount;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -59,6 +61,11 @@ public class BookingServiceImplTest {
     private EventDAOMock          eventDAOMock;
     @Autowired
     private UserDAOMock           userDAOMock;
+
+    @Autowired
+    private UserAccountService    userAccountService;
+
+
     @Autowired
     private DBAuditoriumDAOMock   auditoriumDAOMock;
 
@@ -68,14 +75,17 @@ public class BookingServiceImplTest {
         userDAOMock.init();
         eventDAOMock.init();
         bookingDAOBookingMock.init();
+
     }
 
     @After
     public void cleanup() {
-        auditoriumDAOMock.cleanup();
-        userDAOMock.cleanup();
+
+
         eventDAOMock.cleanup();
         bookingDAOBookingMock.cleanup();
+        auditoriumDAOMock.cleanup();
+        userDAOMock.cleanup();
     }
 
     @Test
@@ -117,14 +127,18 @@ public class BookingServiceImplTest {
                                                                 testEvent1.getAuditorium().getName(),
                                                                 testEvent1.getDateTime());
         User testUser1 = (User) applicationContext.getBean("testUser1");
+        double testUserAccountBefore = userAccountService.getUserAccountByUser(testUser1).getAmount();
         Ticket newTicket = new Ticket(testEvent1, LocalDateTime.now(), Arrays.asList(5, 6), testUser1, 0.0);
         Ticket bookedTicket = bookingService.bookTicket(testUser1, newTicket);
         List<Ticket> after = bookingService.getTicketsForEvent(testEvent1.getName(),
                                                                testEvent1.getAuditorium().getName(),
                                                                testEvent1.getDateTime());
         before.add(bookedTicket);
+
+
         assertTrue("Events should change", after.containsAll(before));
         assertTrue("Events should change", before.containsAll(after));
+        assertEquals("price should be equal",testUserAccountBefore - testEvent1.getTicketPrice(), userAccountService.getUserAccountByUser(testUser1).getAmount() );
     }
 
     @Test
@@ -170,6 +184,7 @@ public class BookingServiceImplTest {
         Ticket ticket = (Ticket) applicationContext.getBean("testTicket2");
         User testUser = new User(UUID.randomUUID().toString(), UUID.randomUUID().toString(), LocalDate.now());
         User registeredUser = userDAOMock.create(testUser);
+
         bookingService.bookTicket(registeredUser,
                                   new Ticket(ticket.getEvent(), LocalDateTime.now(), Collections.singletonList(3),
                                              registeredUser, 0.0));

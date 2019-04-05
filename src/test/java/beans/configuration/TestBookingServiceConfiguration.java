@@ -1,9 +1,7 @@
 package beans.configuration;
 
-import beans.daos.AuditoriumDAO;
-import beans.daos.BookingDAO;
-import beans.daos.EventDAO;
-import beans.daos.UserDAO;
+import beans.daos.*;
+import beans.daos.db.UserAccountDaoImpl;
 import beans.daos.mocks.*;
 import beans.models.*;
 import beans.services.*;
@@ -65,13 +63,13 @@ public class TestBookingServiceConfiguration {
 
     @Bean
     public Event testEvent1() {
-        return new Event(1, "Test event", beans.models.Rate.HIGH, 124.0, java.time.LocalDateTime.of(2016, 2, 6, 14, 45, 0),
+        return new Event(1, "Test event", beans.models.Rate.HIGH,124, 124.0, java.time.LocalDateTime.of(2016, 2, 6, 14, 45, 0),
                          testHall1());
     }
 
     @Bean
     public Event testEvent2() {
-        return new Event(2, "Test event2", Rate.MID, 500.0, java.time.LocalDateTime.of(2016, 12, 6, 9, 35, 0),
+        return new Event(2, "Test event2", Rate.MID,500, 300.0, java.time.LocalDateTime.of(2016, 12, 6, 9, 35, 0),
                          testHall2());
     }
 
@@ -133,9 +131,21 @@ public class TestBookingServiceConfiguration {
         return new UserServiceImpl(userDAOMock());
     }
 
+    @Bean
+    public UserAccountDAO userAccountDAO() {
+        return new UserAccountDaoImpl();
+    }
+
+
+    @Bean(name = "testUserAccountServiceImpl")
+    public UserAccountService userAccountServiceImpl() {
+        return new UserAccountServiceImpl(userAccountDAO());
+    }
+
+
     @Bean(name = "testBookingServiceImpl")
     public BookingService bookingServiceImpl() {
-        return new BookingServiceImpl(eventServiceImpl(), auditoriumServiceImpl(), userServiceImpl(),
+        return new BookingServiceImpl(eventServiceImpl(), auditoriumServiceImpl(), userServiceImpl(),userAccountServiceImpl(),
                                       discountBookingServiceImpl(), bookingBookingDAO(), 1, 2, 1.2, 1);
     }
 }

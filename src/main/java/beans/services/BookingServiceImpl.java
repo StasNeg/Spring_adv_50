@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -29,8 +32,10 @@ public class BookingServiceImpl implements BookingService {
     private final EventService      eventService;
     private final AuditoriumService auditoriumService;
     private final UserService       userService;
+    private final UserAccountService userAccountService;
     private final BookingDAO        bookingDAO;
     private final DiscountService   discountService;
+
     final         int               minSeatNumber;
     final         double            vipSeatPriceMultiplier;
     final         double            highRatedPriceMultiplier;
@@ -40,6 +45,7 @@ public class BookingServiceImpl implements BookingService {
     public BookingServiceImpl(@Qualifier("eventServiceImpl") EventService eventService,
                               @Qualifier("auditoriumServiceImpl") AuditoriumService auditoriumService,
                               @Qualifier("userServiceImpl") UserService userService,
+                              @Qualifier("userAccountServiceImpl") UserAccountService userAccountService,
                               @Qualifier("discountServiceImpl") DiscountService discountService,
                               @Qualifier("bookingDAO") BookingDAO bookingDAO,
                               @Value("${min.seat.number}") int minSeatNumber,
@@ -49,6 +55,7 @@ public class BookingServiceImpl implements BookingService {
         this.eventService = eventService;
         this.auditoriumService = auditoriumService;
         this.userService = userService;
+        this.userAccountService = userAccountService;
         this.bookingDAO = bookingDAO;
         this.discountService = discountService;
         this.minSeatNumber = minSeatNumber;
@@ -100,17 +107,6 @@ public class BookingServiceImpl implements BookingService {
         final double simpleSeatsPrice = simpleSeats.size() * seatPrice;
         final double vipSeatsPrice = vipSeats.size() * vipSeatPrice;
 
-        //        System.out.println("auditoriumVipSeats = " + auditoriumVipSeats);
-        //        System.out.println("baseSeatPrice = " + baseSeatPrice);
-        //        System.out.println("rateMultiplier = " + rateMultiplier);
-        //        System.out.println("vipSeatPriceMultiplier = " + vipSeatPriceMultiplier);
-        //        System.out.println("seatPrice = " + seatPrice);
-        //        System.out.println("vipSeatPrice = " + vipSeatPrice);
-        //        System.out.println("discount = " + discount);
-        //        System.out.println("seats = " + seats);
-        //        System.out.println("simpleSeats.size() = " + simpleSeats.size());
-        //        System.out.println("vipSeats.size() = " + vipSeats.size());
-
         final double totalPrice = simpleSeatsPrice + vipSeatsPrice;
 
         return (1.0 - discount) * totalPrice;
@@ -126,7 +122,8 @@ public class BookingServiceImpl implements BookingService {
                                   seatsNumber));
         });
     }
-
+//    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE)
+//    @Transactional(propagation = Propagation.MANDATORY, isolation = Isolation.SERIALIZABLE)
     @Override
     public Ticket bookTicket(User user, Ticket ticket) {
         if (Objects.isNull(user)) {
@@ -136,16 +133,25 @@ public class BookingServiceImpl implements BookingService {
         if (Objects.isNull(foundUser)) {
             throw new IllegalStateException("User: [" + user + "] is not registered");
         }
-
+        UserAccount userAccount  = userAccountService.getUserAccountByUser(user);
+        if(Objects.isNull(userAccount)){
+            throw new IllegalStateException("UserAccount: [" + user + "] is not registered");
+        }
         List<Ticket> bookedTickets = bookingDAO.getTickets(ticket.getEvent());
         boolean seatsAreAlreadyBooked = bookedTickets.stream().filter(bookedTicket -> ticket.getSeatsList().stream().filter(
                 bookedTicket.getSeatsList() :: contains).findAny().isPresent()).findAny().isPresent();
-
-        if (!seatsAreAlreadyBooked)
-            bookingDAO.create(user, ticket);
+        if (!seatsAreAlreadyBooked) {
+//        test if ticket price lower than
+            if(userAccount.getAmount()-ticket.getEvent().getTicketPrice()>0) {
+                userAccount.setAmount(userAccount.getAmount()-ticket.getEvent().getTicketPrice());
+                userAccountService.createOrUpdate(user,userAccount);
+                bookingDAO.create(user, ticket);
+            }else{
+                throw new IllegalStateException("Unable to book ticket: [" + ticket + "]. User doesn't have enough money.");
+            }
+        }
         else
             throw new IllegalStateException("Unable to book ticket: [" + ticket + "]. Seats are already booked.");
-
         return ticket;
     }
 

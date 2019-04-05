@@ -1,7 +1,11 @@
 package beans.configuration;
 
+import beans.daos.UserAccountDAO;
+import beans.daos.db.UserAccountDaoImpl;
 import beans.daos.mocks.UserDAOMock;
 import beans.models.User;
+import beans.services.UserAccountService;
+import beans.services.UserAccountServiceImpl;
 import beans.services.UserService;
 import beans.services.UserServiceImpl;
 import org.springframework.context.annotation.Bean;
@@ -36,5 +40,15 @@ public class TestUserServiceConfiguration {
     @Bean(name = "testUserServiceImpl")
     public UserService userServiceImpl() {
         return new UserServiceImpl(userDAO());
+    }
+    @Bean
+    public UserAccountDAO userAccountDAO() {
+        return new UserAccountDaoImpl();
+    }
+
+
+    @Bean(name = "testUserAccountServiceImpl")
+    public UserAccountService userAccountServiceImpl() {
+        return new UserAccountServiceImpl(userAccountDAO());
     }
 }
