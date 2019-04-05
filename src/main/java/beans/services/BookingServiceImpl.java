@@ -123,7 +123,7 @@ public class BookingServiceImpl implements BookingService {
         });
     }
 //    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE)
-//    @Transactional(propagation = Propagation.MANDATORY, isolation = Isolation.SERIALIZABLE)
+    @Transactional(propagation = Propagation.MANDATORY, isolation = Isolation.SERIALIZABLE)
     @Override
     public Ticket bookTicket(User user, Ticket ticket) {
         if (Objects.isNull(user)) {
