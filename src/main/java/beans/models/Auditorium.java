@@ -3,6 +3,10 @@ package beans.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import util.CsvUtil;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
 /**
@@ -11,7 +15,10 @@ import java.util.List;
  * Date: 2/1/2016
  * Time: 7:55 PM
  */
+@XmlRootElement(name = "auditorium")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Auditorium {
+    @XmlAttribute
     @JsonIgnore
     private long   id;
     private String name;

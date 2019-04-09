@@ -2,7 +2,10 @@ package beans.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import util.DateFormatAdapter;
 
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.LocalDate;
 
 import static beans.models.Roles.REGISTERED_USER;
@@ -13,14 +16,21 @@ import static beans.models.Roles.REGISTERED_USER;
  * Date: 2/1/2016
  * Time: 7:35 PM
  */
+
+@XmlRootElement(name = "user")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class User {
+    @XmlAttribute
     @JsonIgnore
     private long id;
     private String email;
     private String name;
+    @XmlJavaTypeAdapter(DateFormatAdapter.class )
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
     private String roles;
+    @XmlTransient
+    @JsonIgnore
     private String password;
 
     public User() {

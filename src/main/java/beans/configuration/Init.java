@@ -69,9 +69,9 @@ public class Init {
         userService.register(user1);
         userService.register(user2);
         userService.register(user3);
-        Arrays.asList(new UserAccount(user1, 380),
-        new UserAccount(user2, 450),
-        new UserAccount(user3, 20)).forEach(userAccount->userAccountService.createOrUpdate(userAccount.getUser(),userAccount));
+        Arrays.asList(new UserAccount(user1, 20000),
+        new UserAccount(user2, 2050),
+        new UserAccount(user3, 2300)).forEach(userAccount->userAccountService.createOrUpdate(userAccount.getUser(),userAccount));
 
 
         User userByEmail = userService.getUserByEmail(email);

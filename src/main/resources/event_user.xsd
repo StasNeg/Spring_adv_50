@@ -1,0 +1,53 @@
+<?xml version="1.0" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://beans.models.xml/user-web.service"
+           targetNamespace="http://beans.models.xml/user-web.service" elementFormDefault="qualified">
+
+  <xs:element name="auditorium" type="tns:auditorium"/>
+
+  <xs:element name="event" type="tns:event"/>
+
+  <xs:element name="user" type="tns:user"/>
+
+  <xs:simpleType name="rate">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="HIGH"/>
+      <xs:enumeration value="MID"/>
+      <xs:enumeration value="LOW"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="event">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" minOccurs="0"/>
+      <xs:element name="rate" type="tns:rate" minOccurs="0"/>
+      <xs:element name="ticketPrice" type="xs:double"/>
+      <xs:element name="basePrice" type="xs:double"/>
+      <xs:element name="dateTime" type="xs:string" minOccurs="0"/>
+      <xs:element ref="tns:auditorium"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:long" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="auditorium">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" minOccurs="0"/>
+      <xs:element name="seatsNumber" type="xs:int"/>
+      <xs:element name="vipSeats" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:long" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="user">
+    <xs:sequence>
+      <xs:element name="email" type="xs:string" minOccurs="0"/>
+      <xs:element name="name" type="xs:string" minOccurs="0"/>
+      <xs:element name="birthday" type="xs:string" minOccurs="0"/>
+      <xs:element name="roles" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:long" use="required"/>
+  </xs:complexType>
+
+
+</xs:schema>
+

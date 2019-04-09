@@ -2,7 +2,10 @@ package beans.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import util.DateFormatAdapter;
 
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.LocalDateTime;
 
 /**
@@ -11,25 +14,30 @@ import java.time.LocalDateTime;
  * Date: 2/1/2016
  * Time: 7:42 PM
  */
+@XmlRootElement(name = "event")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Event {
+    @XmlAttribute
     @JsonIgnore
-    private long          id;
-    private String        name;
-    private Rate          rate;
-    private double        ticketPrice;
-    private double        basePrice;
+    private long id;
+    private String name;
+    private Rate rate;
+    private double ticketPrice;
+    private double basePrice;
+    @XmlJavaTypeAdapter(DateFormatAdapter.class )
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime dateTime;
-    private Auditorium    auditorium;
+    @XmlElementRef(name = "auditorium")
+    private Auditorium auditorium;
 
     public Event() {
     }
 
-    public Event(String name, Rate rate, double basePrice, double ticketPrice,LocalDateTime dateTime, Auditorium auditorium) {
-        this(-1, name, rate, basePrice, ticketPrice,dateTime, auditorium);
+    public Event(String name, Rate rate, double basePrice, double ticketPrice, LocalDateTime dateTime, Auditorium auditorium) {
+        this(-1, name, rate, basePrice, ticketPrice, dateTime, auditorium);
     }
 
-    public Event(long id, String name, Rate rate, double basePrice,double ticketPrice, LocalDateTime dateTime, Auditorium auditorium) {
+    public Event(long id, String name, Rate rate, double basePrice, double ticketPrice, LocalDateTime dateTime, Auditorium auditorium) {
         this.id = id;
         this.name = name;
         this.rate = rate;
@@ -144,13 +152,13 @@ public class Event {
     @Override
     public String toString() {
         return "Event{" +
-               "id=" + id +
-               ", name='" + name + '\'' +
-               ", rate=" + rate +
-               ", basePrice=" + basePrice +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", rate=" + rate +
+                ", basePrice=" + basePrice +
                 ", ticketPrice=" + ticketPrice +
-               ", dateTime=" + dateTime +
-               ", auditorium=" + auditorium +
-               '}';
+                ", dateTime=" + dateTime +
+                ", auditorium=" + auditorium +
+                '}';
     }
 }
