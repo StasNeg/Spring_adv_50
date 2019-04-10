@@ -1,12 +1,10 @@
 <?xml version="1.0" standalone="yes"?>
 <xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           xmlns:tns="http://beans.models.xml/user-web.service"
-           targetNamespace="http://beans.models.xml/user-web.service" elementFormDefault="qualified">
+           xmlns:tns="http://beans.models.xml/user-web"
+           targetNamespace="http://beans.models.xml/user-web" elementFormDefault="qualified">
 
   <xs:element name="auditorium" type="tns:auditorium"/>
-
   <xs:element name="event" type="tns:event"/>
-
   <xs:element name="user" type="tns:user"/>
 
   <xs:simpleType name="rate">
@@ -47,6 +45,38 @@
     </xs:sequence>
     <xs:attribute name="id" type="xs:long" use="required"/>
   </xs:complexType>
+
+  <xs:element name="getUserRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="userEmail" type="xs:string"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="getUserResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="user" type="tns:user"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="getEventRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="eventName" type="xs:string"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="getEventResponse">
+  <xs:complexType >
+    <xs:sequence>
+      <xs:element name="events" type="tns:event" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  </xs:element>
 
 
 </xs:schema>

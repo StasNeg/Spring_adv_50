@@ -10,15 +10,16 @@
 
     <http pattern="/resources/**" security="none"/>
     <http pattern="/webjars/**" security="none"/>
-    <http pattern="/ws/**" security="none"/>
+    <http pattern="/soapws/**" security="none"/>
 
     <b:bean class="util.PasswordUtil" id="passwordEncoder" factory-method="getPasswordEncoder"/>
     <b:bean id="userService" class="beans.services.UserServiceImpl"/>
 
     <http use-expressions="true">
         <intercept-url pattern="/login" access="isAnonymous()"/>
+        <intercept-url pattern="/soapws" access="isAnonymous()"/>
         <intercept-url pattern="/**/booking/**" access="hasRole('ROLE_BOOKING_MANAGER')"/>
-        <intercept-url pattern="/**" access="isAuthenticated()"/>
+        <intercept-url pattern="/" access="isAuthenticated()"/>
 
         <form-login login-page="/login" default-target-url="/"
                     authentication-failure-url="/login?error=true"
