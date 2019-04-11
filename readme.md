@@ -14,3 +14,11 @@
     - test if user have enough money
     - withdraw and book ticket
 - add and fix test classes according to new functionality   
+## for Assignment 4 implemented:
+- soap java object classes (created according to xsd schema automatically) path: xml.models.beans.user_web
+- soap endpoints
+- created client in folder soapClient
+    - independent application (just add into maven panel)
+    - define your endPoint (place were your wsdl schema was defined) in maven properties: wsdl_end_point
+    - before run you should create xml-java objects (use command mvn clean package);
+    - application shows work with two soap-oriented end-points

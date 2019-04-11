@@ -13,18 +13,20 @@ public class RunSoapClient {
         ctx.register(ClientAppConfig.class);
         ctx.refresh();
         UserEventClient userClient = ctx.getBean(UserEventClient.class);
+        EndPoint points = ctx.getBean(EndPoint.class);
+        System.out.println("Endpoint :" + points.getEND_POINT());
         System.out.println("For Student Email: dmitriy.vbabichev@gmail.com");
         GetUserResponse response = userClient.getUserByName("dmitriy.vbabichev@gmail.com");
         System.out.println("Email:" + response.getUser().getEmail());
         System.out.println("Date:" + response.getUser().getBirthday());
         System.out.println("Id:" + response.getUser().getId());
-
         GetEventResponse responseEvent = userClient.getEventByName("The revenant");
         for (Event resp : responseEvent.getEvents()) {
+            System.out.println("Event name:" + resp.getName());
             System.out.println("Event auditorium name:" + resp.getAuditorium().getName());
             System.out.println("Event ID:" + resp.getId());
-            System.out.println("Event ID:" + resp.getId());
-
+            System.out.println("Event Date:" + resp.getDateTime());
+            System.out.println("Event rate:" + resp.getRate());
         }
     }
 }
