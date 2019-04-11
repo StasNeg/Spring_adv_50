@@ -38,6 +38,10 @@ public interface Converter {
     static User toUser(beans.models.User user) {
         User result = new User();
         result.setBirthday(user.getBirthday().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        result.setName(user.getName());
+        result.setEmail(user.getEmail());
+        result.setId(user.getId());
+        result.setRoles(user.getRoles());
         return result;
     }
 
