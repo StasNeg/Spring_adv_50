@@ -22,7 +22,7 @@ import java.util.List;
 import static util.MapperUtil.MAPPER;
 
 @Controller
-@RequestMapping(value = "/booking")
+@RequestMapping(value = "/rest/booking")
 public class BookingController {
 
     private final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
@@ -37,7 +37,7 @@ public class BookingController {
     }
 
     //      curl -X GET \
-    //      'http://localhost:8080/booking/1?event=The%20revenant&auditorium=Blue%20hall&date=2016-02-05T09:00&seats=27,28,29' \
+    //      'http://localhost:8080/booking/1?event=The%20revenant&auditorium=Blue%20hall&date=2016-02-05T09:00&seats=27,28,29&format=json' \
 
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
