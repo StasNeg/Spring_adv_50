@@ -1,4 +1,4 @@
-package beans.web;
+package beans.web.rest;
 
 import beans.models.Ticket;
 import beans.services.BookingService;

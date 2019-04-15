@@ -1,13 +1,6 @@
-package beans.web.dto;
+package com.model;
 
-import beans.models.User;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
-import static util.PasswordUtil.encode;
-
-public class UserTo {
+public class User {
 
     private long id;
     private String name;
@@ -16,17 +9,17 @@ public class UserTo {
     private String roles;
     private String birthDay;
 
-    public UserTo() {
+    public User() {
     }
 
-    public UserTo(long id, String name, String email, String password) {
+    public User(long id, String name, String email, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
     }
 
-    public UserTo(long id, String name, String email, String password, String roles) {
+    public User(long id, String name, String email, String password, String roles) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -34,18 +27,13 @@ public class UserTo {
         this.roles = roles;
     }
 
-    public UserTo(User user) {
-        this.id = user.getId();
-        this.name = user.getName();
-        this.email = user.getEmail();
-        this.roles = user.getRoles();
-        this.birthDay = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(user.getBirthday());
-    }
-
-    public static User fromTo(UserTo userTo) {
-        return new User(userTo.getId(), userTo.getEmail(), userTo.getName(),
-                LocalDate.parse(userTo.getBirthDay(), DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                userTo.getRoles(), userTo.getPassword());
+    public User(long id, String name, String email, String password, String roles, String birthDay) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+        this.birthDay = birthDay;
     }
 
     public long getId() {
@@ -85,7 +73,7 @@ public class UserTo {
     }
 
     public void setPassword(String password) {
-        this.password = encode(password);
+        this.password = password;
     }
 
     public String getRoles() {
@@ -94,5 +82,17 @@ public class UserTo {
 
     public void setRoles(String roles) {
         this.roles = roles;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", roles='" + roles + '\'' +
+                ", birthDay='" + birthDay + '\'' +
+                '}';
     }
 }

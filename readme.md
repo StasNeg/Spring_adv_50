@@ -22,3 +22,9 @@
     - define your endPoint (place were your wsdl schema was defined) in maven properties: wsdl_end_point
     - before run you should create xml-java objects (use command mvn clean package);
     - application shows work with two soap-oriented end-points
+## for Assignment 4 REST implemented:
+- created rest MVC configuration for two resolvers:
+    - pdf (custom resolver) only for Tickets Type;
+    - json - standard JsonResolver
+*** Important: resolvers are working with parameter = (mediaType=json or pdf)
+- Implemented rest client in restClient folder.

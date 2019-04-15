@@ -56,6 +56,15 @@ public class User {
         this(-1, email, name, birthday, roles);
     }
 
+    public User(long id, String email, String name, LocalDate birthday, String roles, String password) {
+        this.id = id;
+        this.email = email;
+        this.name = name;
+        this.birthday = birthday;
+        this.roles = roles;
+        this.password = password;
+    }
+
     public User withId(long id) {
         return new User(id, email, name, birthday, roles);
     }
